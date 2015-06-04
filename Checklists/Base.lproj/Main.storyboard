@@ -7,6 +7,7 @@
         <!--Checklists-->
         <scene sceneID="byy-kF-G1V">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cbD-yT-3KB" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="Kyx-DC-7ka" customClass="ChecklistViewController" customModule="Checklists" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="ziW-Y8-CPa">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -50,7 +51,6 @@
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cbD-yT-3KB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="236" y="307"/>
         </scene>
@@ -102,14 +102,10 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="doneBarButton" destination="jSN-bi-sw6" id="r19-Pz-Dsk"/>
-                        <outlet property="textField" destination="hza-IN-qzD" id="Zv8-f9-fKd"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rep-2d-hnZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1698" y="302"/>
+            <point key="canvasLocation" x="1862" y="307"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Bvu-Ke-tdA">
