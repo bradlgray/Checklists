@@ -21,23 +21,30 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.delegate = self
         
-        let index = NSUserDefaults.standardUserDefaults().integerForKey("ChecklistIndex")
+        let index = dataModel.indexOfSelectedChecklist
         
-        if index != -1 {
+        if index >= 0 && index < dataModel.lists.count {
             let checklist = dataModel.lists[index]
             performSegueWithIdentifier("ShowChecklist", sender: checklist)
         }
     }
-    override func didReceiveMemoryWarning() {
+    
+        override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: - Table view data source
+   
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataModel.lists.count
@@ -48,18 +55,26 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         let cellIdentifier = "Cell"
         var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as? UITableViewCell
         if cell == nil {
-            cell = UITableViewCell(style: .Default, reuseIdentifier: cellIdentifier)
+            cell = UITableViewCell(style: .Subtitle, reuseIdentifier: cellIdentifier)
         }
-        
         let checklist = dataModel.lists[indexPath.row]
         cell.textLabel!.text = checklist.name
         cell.accessoryType = .DetailDisclosureButton
+            let count = checklist.countUncheckedItems()
+            if checklist.items.count == 0 {
+                cell.detailTextLabel!.text = "(No Items)"
+            } else if count == 0 {
+                cell.detailTextLabel!.text = "All Done!"
+            } else {
+                cell.detailTextLabel!.text = "\(count) Remaining" }
+        
+        cell.detailTextLabel!.text = "\(checklist.countUncheckedItems()) Remaining"
         
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        NSUserDefaults.standardUserDefaults().setInteger(indexPath.row, forKey: "ChecklistIndex")
+        dataModel.indexOfSelectedChecklist = indexPath.row
         let checklist = dataModel.lists[indexPath.row]
         performSegueWithIdentifier("ShowChecklist", sender: checklist)
     }
@@ -121,6 +136,8 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+        
+    
     
     func documentsDirectory() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
@@ -152,7 +169,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     }
     func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
         if viewController === self {
-            NSUserDefaults.standardUserDefaults().setInteger(-1, forKey: "ChecklistIndex")
+            dataModel.indexOfSelectedChecklist = -1
         }
     }
     
