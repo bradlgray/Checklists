@@ -29,6 +29,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
         navigationController?.delegate = self
         
         let index = dataModel.indexOfSelectedChecklist
@@ -60,7 +61,9 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         let checklist = dataModel.lists[indexPath.row]
         cell.textLabel!.text = checklist.name
         cell.accessoryType = .DetailDisclosureButton
-            let count = checklist.countUncheckedItems()
+        
+        
+        let count = checklist.countUncheckedItems()
             if checklist.items.count == 0 {
                 cell.detailTextLabel!.text = "(No Items)"
             } else if count == 0 {
@@ -68,8 +71,10 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
             } else {
                 cell.detailTextLabel!.text = "\(count) Remaining" }
         
-        cell.detailTextLabel!.text = "\(checklist.countUncheckedItems()) Remaining"
         
+        cell.imageView!.image = UIImage(named: checklist.iconName)
+    
+    
         return cell
     }
     
@@ -115,63 +120,33 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     }
     
     func listDetailViewController(controller: ListDetailViewController, didFinishAddingChecklist checklist: Checklist) {
-        let newRowIndex = dataModel.lists.count
+        
         
         dataModel.lists.append(checklist)
         
-        let indexPath = NSIndexPath(forRow: newRowIndex, inSection: 0)
-        let indexPaths = [indexPath]
-        tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+        dataModel.sortChecklists()
+        tableView.reloadData()
         
         dismissViewControllerAnimated(true, completion: nil)
     }
     
     func listDetailViewController(controller: ListDetailViewController, didFinishEditingChecklist checklist: Checklist) {
-        if let index = find(dataModel.lists, checklist) {
-            let indexPath = NSIndexPath(forRow: index, inSection: 0)
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
-                cell.textLabel!.text = checklist.name
-            }
-        }
+        dataModel.lists.append(checklist)
+        dataModel.sortChecklists()
+        tableView.reloadData()
         dismissViewControllerAnimated(true, completion: nil)
+    
+    
     }
     
         
     
     
-    func documentsDirectory() -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-        as! [String]
-        
-        return paths[0]
-    }
-    func dataFilePath() -> String {
-        return documentsDirectory().stringByAppendingPathComponent("Checklist.plist")
-    }
-    
-    func saveChecklists() {
-        let data = NSMutableData()
-        let archiver = NSKeyedArchiver(forWritingWithMutableData: data)
-        archiver.encodeObject(dataModel.lists, forKey: "Checklists")
-        archiver.finishEncoding()
-        data.writeToFile(dataFilePath(), atomically: true)
-    }
-    func loadChecklists() {
-        let path = dataFilePath()
-        if NSFileManager.defaultManager().fileExistsAtPath(path) {
-            if let data = NSData(contentsOfFile: path) {
-                let unarchiver = NSKeyedUnarchiver(forReadingWithData: data)
-                dataModel.lists = unarchiver.decodeObjectForKey("Checklists")
-                as! [Checklist]
-                unarchiver.finishDecoding()
-            }
-        }
-    }
-    func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
+      func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
         if viewController === self {
             dataModel.indexOfSelectedChecklist = -1
         }
     }
-    
-    
 }
+
+

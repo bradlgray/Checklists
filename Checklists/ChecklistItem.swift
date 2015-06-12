@@ -12,9 +12,14 @@ class ChecklistItem: NSObject, NSCoding {
     var text = ""
     var checked = false
     
+    
     func toggleChecked() {
         checked = !checked
     }
+    override init() {
+        super.init()
+    }
+
     
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeObject(text, forKey: "Text")
@@ -26,7 +31,4 @@ class ChecklistItem: NSObject, NSCoding {
         
         super.init()
     }
-    override init() {
-        super.init()
-    }
-         }
+             }
