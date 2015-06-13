@@ -19,8 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let controller = navigationController.viewControllers[0] as! AllListsViewController
         controller.dataModel = dataModel
         // Override point for customization after application launch.
+        
+        let notificationSettings = UIUserNotificationSettings(forTypes: .Alert | .Sound, categories: nil)
+        UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
         return true
     }
+    
+
     
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -48,6 +53,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func saveData() {
     dataModel.saveChecklists()
     }
-    
+    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+        println("didReceiveLocalNotifcation \(notification)")
+    }
 }
 
