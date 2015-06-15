@@ -16,6 +16,8 @@ protocol ItemDetailViewControllerDelegate: class {
 
 class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
     
+    var datePickerVisible = false
+    
     var dueDate = NSDate()
     
     @IBOutlet weak var textField: UITextField!
@@ -87,8 +89,18 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
         formatter.timeStyle = .ShortStyle
         dueDateLabel.text = formatter.stringFromDate(dueDate)
     }
-    
-    
+    func showDatePicker() {
+        datePickerVisible = true
+        
+        let indexPathDatePicker = NSIndexPath(forRow: 2, inSection: 1)
+        
+        tableView.insertRowsAtIndexPaths([indexPathDatePicker], withRowAnimation: .Fade)
+    }
+    override func tableViev(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if indexPath.section == 1 && indexPath.row == 2 {
+            
+        }
+    }
     
 }
     
