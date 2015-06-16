@@ -21,11 +21,11 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
-
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -40,12 +40,10 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         }
     }
     
-        override func didReceiveMemoryWarning() {
+    override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-   
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataModel.lists.count
@@ -58,28 +56,28 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         if cell == nil {
             cell = UITableViewCell(style: .Subtitle, reuseIdentifier: cellIdentifier)
         }
+        
         let checklist = dataModel.lists[indexPath.row]
         cell.textLabel!.text = checklist.name
         cell.accessoryType = .DetailDisclosureButton
         
-        
         let count = checklist.countUncheckedItems()
-            if checklist.items.count == 0 {
-                cell.detailTextLabel!.text = "(No Items)"
-            } else if count == 0 {
-                cell.detailTextLabel!.text = "All Done!"
-            } else {
-                cell.detailTextLabel!.text = "\(count) Remaining" }
-        
+        if checklist.items.count == 0 {
+            cell.detailTextLabel!.text = "(No Items)"
+        } else if count == 0 {
+            cell.detailTextLabel!.text = "All Done!"
+        } else {
+            cell.detailTextLabel!.text = "\(count) Remaining"
+        }
         
         cell.imageView!.image = UIImage(named: checklist.iconName)
-    
-    
+        
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         dataModel.indexOfSelectedChecklist = indexPath.row
+        
         let checklist = dataModel.lists[indexPath.row]
         performSegueWithIdentifier("ShowChecklist", sender: checklist)
     }
@@ -120,33 +118,21 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     }
     
     func listDetailViewController(controller: ListDetailViewController, didFinishAddingChecklist checklist: Checklist) {
-        
-        
         dataModel.lists.append(checklist)
-        
         dataModel.sortChecklists()
         tableView.reloadData()
-        
         dismissViewControllerAnimated(true, completion: nil)
     }
     
     func listDetailViewController(controller: ListDetailViewController, didFinishEditingChecklist checklist: Checklist) {
-        dataModel.lists.append(checklist)
         dataModel.sortChecklists()
         tableView.reloadData()
         dismissViewControllerAnimated(true, completion: nil)
-    
-    
     }
     
-        
-    
-    
-      func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
+    func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
         if viewController === self {
             dataModel.indexOfSelectedChecklist = -1
         }
     }
 }
-
-
